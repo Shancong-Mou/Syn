@@ -1,0 +1,8 @@
+numpy
+Pillow
+matplotlib
+tqdm
+opencv-python
+pandas
+suhi
+scipy
