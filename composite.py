@@ -346,7 +346,7 @@ def augment(defects_path, defect_annotation_file, output_dir):
 # it will also generate the correpsonding defect annotation file, named 
 # "generated_training_images_annotation.json"
 # 
-def generate_new_dataset(image_path, input_background_images_list, input_image_annotation, defects_path, defect_annotation_file, output_path, num_def_per_img = 5 ,agument_per_image = 10):
+def generate_new_dataset(image_path, input_background_images_list, input_image_annotation, defects_path, defect_annotation_file, output_path, num_def_per_img = 5, agument_per_image = 10):
     # image_path: input iamge path
     # input_image_annotation: if empty just use [] (we do not reuqire the input image to be clean, if it has defect, please also include the 
     #                           defect annotations)
@@ -356,12 +356,14 @@ def generate_new_dataset(image_path, input_background_images_list, input_image_a
     # output_path: 
     # num_def_per_img: number of generated defcts per image
     # agument_per_image: out_put_image_number/input_image_number, defalut 10
-    # read defecta nnotation files
+    # read defecta annotation files
     os.makedirs(output_path, exist_ok= True)
     with open(defect_annotation_file, 'r') as f:
         defect_annotations = json.load(f)
     defects_list = os.listdir(defects_path)
     generated_training_images_annotation={} # annotations of the generated training set
+
+
     for image_name in tqdm(input_background_images_list, desc= 'Generating_synthetic_defect_image_dataset', position = 0):
         # generate defect on top of input images (repeat 10 times)
         for image_count in tqdm(range(agument_per_image), desc = 'synthetic images per input images', position = 1, leave=False):
@@ -374,6 +376,7 @@ def generate_new_dataset(image_path, input_background_images_list, input_image_a
             # read defects from defect library
             # defects_selected = random.choice(sorted(images_names_train), num_def_per_img)
             count = 0 
+
             while count<num_def_per_img:
                 try: # some annotation maynot have segmentation annotation, just skip
                     individual_defect_annotations = {}
@@ -402,7 +405,7 @@ def generate_new_dataset(image_path, input_background_images_list, input_image_a
                     # define center defect location on the target image
 
 
-                    # use self poission composition
+                    # use poission composition
                     # sample new location on the target image
                     new_x = random.choice(range(20, width-w-20))
                     new_y = random.choice(range(20, height-h-20))
@@ -418,7 +421,7 @@ def generate_new_dataset(image_path, input_background_images_list, input_image_a
                     # bbox
                     bbox_new = [new_x, new_y, w, h]
                     # seg 
-                    seg1_new = [ (np.array(poly)+np.array([Dx,Dy])).tolist() for poly in defct_annotation['seg1']]
+                    seg1_new = [ (np.array(poly)+np.array([Dx,Dy])).tolist() for poly in defct_annotation['seg1']]                    
                     # add the annotation of this specific defect into annotation list
                     individual_defect_annotations['bbox'] = bbox_new
                     individual_defect_annotations['seg1'] = seg1_new
