@@ -221,7 +221,7 @@ def defect_source_prep(image_path, coco, out_put_dir):
 # the augmentation is applied on both the defect and its masks, therefore, it will preserve the defect mask
 # It will generate an augmented defect library, as well as an annotation file, named
 # augmented_training_defect_library_annotations.json
-def augment(defects_path, defect_annotation_file, output_dir,augment_cat_Ids, augment_number=10):
+def augment(work_dir, defects_path, defect_annotation_file, output_dir,augment_cat_Ids, augment_number=10 ):
     # data augmentation for the target defects library
     # Nondestructive HorizontalFlip, VerticalFlip, Transpose, RandomRotate90
     # Non-rigid transformations: ElasticTransform, GridDistortion, OpticalDistortion
@@ -321,15 +321,15 @@ def augment(defects_path, defect_annotation_file, output_dir,augment_cat_Ids, au
             
             # image = np.array(overlay)[y:y+h, x:x+w]
             # #display(Image.fromarray(image))
-            # os.makedirs('./Comp_res/'+'ps5_dataset/'+'demo/',exist_ok= True)
-            # # Image.fromarray(image).save('./Comp_res/'+'ps5_dataset/'+'demo/'+str(count)+'_raw_w_msk.png')
+            # os.makedirs(work_dir+'demo/',exist_ok= True)
+            # # Image.fromarray(image).save(work_dir+'demo/'+str(count)+'_raw_w_msk.png')
 
             # mask[:, :, 0] =0
             # color_mask = Image.fromarray(mask)
             # overlay = Image.blend(Image.fromarray(defect_img), color_mask, 0.2)
             # image = np.array(overlay)[int(y):int(y+h), int(x):int(x+w)]
             # #display(Image.fromarray(image))
-            # Image.fromarray(image).save('./Comp_res/'+'ps5_dataset/'+'demo/'+str(count)+'_raw_w_o_msk.png')
+            # Image.fromarray(image).save(work_dir+'demo/'+str(count)+'_raw_w_o_msk.png')
 
             # disply generated images
             mask = np.zeros((transformed_image.shape[0], transformed_image.shape[1], 3)).astype(np.uint8)
@@ -342,24 +342,24 @@ def augment(defects_path, defect_annotation_file, output_dir,augment_cat_Ids, au
             overlay = Image.blend(Image.fromarray(transformed_image), color_mask, 0.2)
             # #display(overlay)
 
-            image = np.array(overlay)[int(y):int(y+h), int(x):int(x+w)]
-            # #display(Image.fromarray(image))
-            # os.makedirs(output_dir, exist_ok= True)
-            os.makedirs('./Comp_res/'+'ps5_dataset/'+'demo/', exist_ok = True)
-            Image.fromarray(image).save('./Comp_res/'+'ps5_dataset/'+'demo/'+str(count)+'_augmented_w_msk.png')
+            # image = np.array(overlay)[int(y):int(y+h), int(x):int(x+w)]
+            # # #display(Image.fromarray(image))
+            # # os.makedirs(output_dir, exist_ok= True)
+            # os.makedirs(work_dir+'demo_element_defect/', exist_ok = True)
+            # Image.fromarray(image).save(work_dir+'demo_element_defect/'+str(count)+'_augmented_w_msk.png')
             
-            mask[:, :, 0] =0
-            color_mask = Image.fromarray(mask)
-            overlay = Image.blend(Image.fromarray(transformed_image), color_mask, 0.2)
-            image = np.array(overlay)[int(y):int(y+h), int(x):int(x+w)]
-            # #display(Image.fromarray(image))
-            Image.fromarray(image).save('./Comp_res/'+'ps5_dataset/'+'demo/'+str(count)+'_augmented_w_o_msk.png')
+            # mask[:, :, 0] =0
+            # color_mask = Image.fromarray(mask)
+            # overlay = Image.blend(Image.fromarray(transformed_image), color_mask, 0.2)
+            # image = np.array(overlay)[int(y):int(y+h), int(x):int(x+w)]
+            # # #display(Image.fromarray(image))
+            # Image.fromarray(image).save(work_dir+'demo_element_defect/'+str(count)+'_augmented_w_o_msk.png')
 
         # #display only the defects
 
         
             # save generated image
-        # Image.fromarray(output.astype(np.uint8)).save('./Comp_res/'+'ps5_dataset/'+'training_set_v1/'+img_name)
+        # Image.fromarray(output.astype(np.uint8)).save(work_dir+'training_set_v1/'+img_name)
         with open(output_dir+'augmented_training_defect_library_annotations.json', 'w') as f:
             json.dump(augmented_training_defect_library_annotations, f)
 
@@ -395,9 +395,9 @@ def generate_new_dataset(image_path, coco_bkg, defects_path, defect_annotation_f
         image = cv2.imread(os.path.join(image_path, img_name))
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         # show the annotation 
-        save_path_raw = output_path[:-1] + 'raw/'+ img_name
-        os.makedirs(output_path[:-1] + 'raw/',exist_ok = True)
-        show_annotation(image,input_image_annotation[img_name], save_path_raw)
+        # save_path_raw = output_path[:-1] + 'raw/'+ img_name
+        # os.makedirs(output_path[:-1] + 'raw/',exist_ok = True)
+        # show_annotation(image,input_image_annotation[img_name], save_path_raw)
         # generate defect on top of input images (repeat 10 times)
         for image_count in tqdm(range(agument_per_image), desc = 'synthetic images per input images', position = 1, leave=False):
             generated_img_name =  str(image_count)+'_'+img_name
@@ -425,9 +425,9 @@ def generate_new_dataset(image_path, coco_bkg, defects_path, defect_annotation_f
                     if len(segmentation)<1:
                         continue
                     # disply loaded defects
-                    os.makedirs( output_path[:-1] + 'demo_def/', exist_ok = True)
-                    save_path_element_defect = output_path[:-1] + 'demo_def/'+  str(count)+ generated_img_name
-                    show_annotation(defect_img, [defct_annotation], save_path_element_defect)
+                    # os.makedirs( output_path[:-1] + 'demo_def/', exist_ok = True)
+                    # save_path_element_defect = output_path[:-1] + 'demo_def/'+  str(count)+ generated_img_name
+                    # show_annotation(defect_img, [defct_annotation], save_path_element_defect)
 
 
                     # defnie soruce and traget image
