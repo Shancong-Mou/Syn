@@ -1,4 +1,4 @@
-# Cut-paste package v1
+# Cut-paste package v2
 This is the developed "cut-paste" package for online synthetic defect data generation. We tested it on the MVTech carpet data set (see the dataset part)
 ## Modules
 ### **Differentiable defect augmentation module: ```diffAugs.py```**
@@ -65,11 +65,7 @@ Please first install related packages by running
 pip install -r requirement.txt
 ```
 
-Please see the demo_v1.ipynb for an example usage, it supports 4 different experiments:
-1. whole image augmentation only
-2. cut-paste-only
-3. cut-paste + clean background (cut-paste-balanced)
-4. whole image augmentation images + cut-paste-only images + clean background images
+This is v2 version of the cut-paste with bi-level learning capability. Please see RUN_v2.sbatch for example code to run.
 
 
 
