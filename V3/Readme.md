@@ -1,7 +1,7 @@
 # Cut-paste package v3
 This is the developed "cut-paste" package for online synthetic defect data generation. Compared to v2, we added the important location learning funtionality. More detials can be found in our paper ```Synth4Seg - Learning Defect Data Synthesis for Defect Segmentation using Bi-level Optimization``` in submission.
 
-Compared to v2, the updates are highlited using yellow ==color==.
+Compared to v2, the updates are highlited using yellow <mark>color<mark>.
 ## Modules
 ### **Differentiable defect augmentation module: ```diffAugs.py```**
 This module supports 8 common augmentation operations in a differentiable way, including:
