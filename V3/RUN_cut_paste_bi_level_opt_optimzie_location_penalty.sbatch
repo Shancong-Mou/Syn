@@ -22,6 +22,7 @@ source activate SynData
 #####################150 epochs #######################
 
 
+
 # random location baseline (Cut&Paste - Random locations )
 srun --exclusive -n 1 -N 1 --mem-per-gpu=24G python Defect_aug_with_default_policy_add_clean_augmentation_proportion_only_optimize_aug_policy_add_each_aug_MV_tech_to_background_optimize_location_baseline.py --root ./Defect_aug_with_default_policy_add_clean_only_parameter_MVTech_start80_capsule_random_location/ --data_root 'capsule' --rnd_seed 0 --num_epochs 150  --dice_weight 0.5  --lr 0.00025 --batch_size 2 --lr_schedule_step_size 20 --apply_augmentations --optimize_weights --paste_per_cat --warm_up 150 --lam_weights 1.0 1.0  --train_from_scrach --save_all_images | tee res_start30_random_location_baseline_0.txt &
 wait

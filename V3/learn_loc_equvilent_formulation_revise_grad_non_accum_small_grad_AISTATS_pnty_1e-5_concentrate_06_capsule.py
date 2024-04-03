@@ -178,7 +178,8 @@ else:
     print('whole image augmentation pretrained model loaded')
 print(30*'-')
 
-# map_pred_net = AutoEncoderCNN()
+# important location predcition network
+# map_pred_net 
 map_pred_net = smp.Unet(
     encoder_name="resnet18",        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
     encoder_weights="imagenet",     # use `imagenet` pre-trained weights for encoder initialization
@@ -431,7 +432,7 @@ for ep in range(epochs):
         plt.savefig(image_root+'ep'+str(ep)+'ibtach'+str(i_batch)+'loc_map'+'.png', bbox_inches='tight')
         plt.close()
         
-        aug_weight = (location_maps*defect_mask).sum((1,2,3), keepdim=True)/defect_mask.sum((1,2,3), keepdim=True).to(device)
+        aug_weight = (location_maps*defect_mask).sum((1,2,3), keepdim=True)/(defect_mask.sum((1,2,3), keepdim=True)+1e-6).to(device)
         # forwrad
         pred_defect_mask = model(augmented_image.to(device))
         gt_defect_mask = defect_mask.to(device)
