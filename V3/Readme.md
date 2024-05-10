@@ -113,7 +113,26 @@ Defect_aug_with_default_policy_add_clean_augmentation_proportion_only_optimize_a
 # optimziation location (Cut&Paste - Learned locations )
 learn_loc_equvilent_formulation_revise_grad_non_accum_small_grad_AISTATS_pnty_1e-5_concentrate_06_capsule.py
 ```
+## <mark>Update_05_09_2024<mark>
+3. This is v3 version of the cut-paste with bi-level learning capability. Please see ```RUN_cut_paste_bi_level_opt_optimzie_location_capsule_exp.sbatch``` for example code to run, where 5 example codes are attached, including:
+```python
+# here we use "warm_up" to control weather optimize location mask, if --warm_up >= --num_epochs 150, then there is no location mask optimziation.
+# here we use "--whole_image_aug", "--rnd_loc", "--obj_loc" and "--learn_loc" to control the mode of experiment
+# here "--whole_image_aug" baseline is train from scratch for 150 epochs. All the other experiments are starting from the 30 epoch pretraining result of "--whole_image_aug" baseline. Therfore, please run "--whole_image_aug" baseline first.
 
+# this is the image level augmentation baseline
+python learn_loc_equvilent_formulation_revise_grad_non_accum_small_grad_AISTATS_pnty_concentrate_06_all_products_with_background_augmentation_integration.py --root './All_experiments/capsule_exp/' --data_root 'capsule' --rnd_seed 0 --num_epochs 150  --dice_weight 0.5  --lr 0.00025 --batch_size 2 --lr_schedule_step_size 20 --apply_augmentations --optimize_weights --paste_per_cat --warm_up 150 --lam_weights 1.0 0.0  --train_from_scrach --whole_image_aug| tee ./All_experiments/capsule_exp/res_start30_image_level_baseline_0.txt &
+# # random location baseline (Cut&Paste - Random locations ) -- this is the baseline
+python learn_loc_equvilent_formulation_revise_grad_non_accum_small_grad_AISTATS_pnty_concentrate_06_all_products_with_background_augmentation_integration.py --root './All_experiments/capsule_exp/' --data_root 'capsule' --rnd_seed 0 --num_epochs 120  --dice_weight 0.5  --lr 0.00025 --batch_size 2 --lr_schedule_step_size 20 --apply_augmentations --optimize_weights --paste_per_cat --warm_up 150 --lam_weights 1.0 1.0  --save_all_images --rnd_loc| tee ./All_experiments/capsule_exp/res_start30_random_location_baseline_0.txt &
+# # this is the object location baseline (Groundtruth product location )
+python learn_loc_equvilent_formulation_revise_grad_non_accum_small_grad_AISTATS_pnty_concentrate_06_all_products_with_background_augmentation_integration.py --root './All_experiments/capsule_exp/' --data_root 'capsule' --rnd_seed 0 --num_epochs 120  --dice_weight 0.5  --lr 0.00025 --batch_size 2 --lr_schedule_step_size 20 --apply_augmentations --optimize_weights --paste_per_cat --warm_up 150 --lam_weights 1.0 1.0   --save_all_images  --obj_loc| tee ./All_experiments/capsule_exp/res_start30_object_location_baseline_0.txt &
+# optimziation location (Cut&Paste - Learned locations )
+# mask_pnty = 0
+python learn_loc_equvilent_formulation_revise_grad_non_accum_small_grad_AISTATS_pnty_concentrate_06_all_products_with_background_augmentation_integration.py --root './All_experiments/capsule_exp/' --data_root 'capsule' --rnd_seed 0 --num_epochs 120  --dice_weight 0.5  --lr 0.00025 --batch_size 2 --lr_schedule_step_size 20 --apply_augmentations --optimize_weights --paste_per_cat --warm_up 0 --lam_weights 1.0 1.0  --save_all_images --mask_pnty 0 --learn_loc| tee ./All_experiments/capsule_exp/res_aug_learn_loc_start30_non_accum_small_grad_AISTATS_pnty_0_concentrate_06.txt  &
+# mask_pnty = 1e-5
+python learn_loc_equvilent_formulation_revise_grad_non_accum_small_grad_AISTATS_pnty_concentrate_06_all_products_with_background_augmentation_integration.py --root './All_experiments/capsule_exp/' --data_root 'capsule' --rnd_seed 0 --num_epochs 120  --dice_weight 0.5  --lr 0.00025 --batch_size 2 --lr_schedule_step_size 20 --apply_augmentations --optimize_weights --paste_per_cat --warm_up 0 --lam_weights 1.0 1.0 --save_all_images  --mask_pnty 1e-5 --learn_loc| tee ./All_experiments/capsule_exp/res_aug_learn_loc_start30_non_accum_small_grad_AISTATS_pnty_1e-5_concentrate_06.txt  &
+
+```
 
 
 
